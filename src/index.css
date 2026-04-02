@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+/* ── Quincy CF ── */
+@font-face {
+  font-family: 'Quincy CF';
+  src: url('/fonts/Quincy Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quincy CF';
+  src: url('/fonts/Quincy Light Italic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quincy CF';
+  src: url('/fonts/Quincy Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Forçar Quincy sempre em peso light nos títulos */
+h1, h2, h3 {
+  font-weight: 300 !important;
+}
+
+/* ── Gotham ── */
+@font-face {
+  font-family: 'Gotham';
+  src: url('/fonts/Gotham-Book.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gotham';
+  src: url('/fonts/Gotham-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-serif: 'Quincy CF', serif;
+  --font-sans: 'Gotham', sans-serif;
+  --color-brand-dark: #081E3B;
+  --color-brand-gold: #90660E;
+  --color-brand-gold-light: #D8BA67;
+  --color-brand-bg: #000000;
+  --color-brand-bg-light: #181818;
+}
+
+.text-gold-gradient {
+  background: linear-gradient(135deg, #90660E, #D8BA67, #90660E);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+@keyframes pulse-scale {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 15px rgba(144,102,14,0.4); }
+  50% { transform: translate(-50%, -50%) scale(1.15); box-shadow: 0 0 25px rgba(144,102,14,0.6); }
+}
+
+.animate-pulse-scale {
+  animation: pulse-scale 2s ease-in-out infinite;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Gotham', sans-serif;
+  line-height: 1.4;
+  color: #ffffff;
+  background-color: #000000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
