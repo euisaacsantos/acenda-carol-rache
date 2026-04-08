@@ -152,7 +152,7 @@ function TattooCarousel() {
             key={idx}
             src="/assets/tatuagens.png"
             alt="Tatuagens"
-            className="flex-shrink-0 h-[280px] md:h-auto w-auto max-w-none object-contain pointer-events-none"
+            className="flex-shrink-0 h-[280px] md:h-auto w-auto max-w-none md:max-w-full object-contain pointer-events-none"
             draggable={false}
           />
         ))}
@@ -182,7 +182,7 @@ export default function App() {
             sua <span className="text-white font-bold">prosperidade</span> e a <span className="text-white font-bold">sua paz</span> — com acompanhamento diário, método <span className="text-white font-bold">100% autoral</span>{' '}
             e embasamento neurocientífico.
           </p>
-          <CTAButton>Quero minha transformação</CTAButton>
+          <CTAButton className="md:px-20">Quero minha transformação</CTAButton>
 
           {/* Credenciais */}
           <div className="mt-10 flex flex-col items-stretch md:items-start gap-3 w-full">
