@@ -492,15 +492,19 @@ export default function App() {
                 <div className="bg-brand-dark/5 border border-brand-dark/10 rounded-2xl p-8 flex items-center justify-center flex-1 min-h-0">
                   <p className="font-sans text-brand-dark/40 text-center">[Inserir comparativo visual: mesma pergunta feita ao GPT vs. à LIZ]</p>
                 </div>
-                <div className="hidden md:block rounded-2xl overflow-hidden flex-1 min-h-0">
-                  <img src="/assets/ft depoimentos acenda.webp" alt="Depoimentos sobre a LIZ" className="w-full h-full object-cover" />
-                </div>
                 <div className="md:hidden flex flex-col gap-4">
                   {[1,2,3,4].map((n) => (
                     <img key={n} src={`/assets/depo${n} acenda.webp`} alt={`Depoimento ${n}`} className="w-full h-auto rounded-2xl" />
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Depoimentos LIZ — linha cheia abaixo (desktop) */}
+          <div className="hidden md:block mt-10">
+            <div className="w-full max-w-[1140px] mx-auto rounded-2xl overflow-hidden">
+              <img src="/assets/ft depoimentos acenda.webp" alt="Depoimentos sobre a LIZ" className="w-full h-auto object-cover" />
             </div>
           </div>
         </div>
