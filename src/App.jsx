@@ -150,7 +150,7 @@ function TattooCarousel() {
         {tripled.map((_, idx) => (
           <img
             key={idx}
-            src="/assets/tatuagens.png"
+            src="/assets/tatuagens.webp"
             alt="Tatuagens"
             className="flex-shrink-0 h-[280px] md:h-auto w-auto max-w-none md:max-w-full object-contain pointer-events-none"
             draggable={false}
@@ -165,11 +165,65 @@ export default function App() {
   useEffect(() => {
     trackEvent('PageView')
   }, [])
+
+  // Animações de scroll suaves (não-invasivo: aplica classes via JS)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const root = document.querySelector('.min-h-screen') || document.body
+    const sections = root.querySelectorAll('section')
+
+    sections.forEach((section, sIdx) => {
+      // Não animar a primeira dobra (hero) — entrada imediata
+      if (sIdx === 0) return
+
+      // Títulos e parágrafos: fade-up
+      section.querySelectorAll('h1, h2, h3, h4, p, ul, ol, blockquote').forEach((el) => {
+        el.classList.add('reveal')
+      })
+
+      // Imagens: fade + zoom-out leve
+      section.querySelectorAll('img').forEach((el) => {
+        el.classList.add('reveal-img')
+      })
+
+      // Cards/itens em grids: fade-up com leve stagger
+      section.querySelectorAll('.grid > *, .flex.flex-wrap > *').forEach((el, i) => {
+        el.classList.add('reveal', 'lift')
+        const delay = (i % 4) + 1
+        el.classList.add(`reveal-delay-${delay}`)
+      })
+
+      // CTAs: glow sutil contínuo
+      section.querySelectorAll('a[href="#investimento"], a[target="_blank"]').forEach((el) => {
+        if (el.className.includes('from-[#90660E]')) {
+          el.classList.add('animate-subtle-glow')
+        }
+      })
+    })
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    )
+
+    root.querySelectorAll('.reveal, .reveal-img').forEach((el) => observer.observe(el))
+
+    return () => observer.disconnect()
+  }, [])
   return (
     <div className="min-h-screen bg-brand-bg text-white overflow-x-hidden">
 
       {/* ═══════════════ HERO ═══════════════ */}
-      <section className="relative pt-40 pb-10 md:py-16 bg-[url('/assets/ASLBG1MOBILE.png')] md:bg-[url('/assets/ASLBG1DESK.png')] bg-contain md:bg-cover bg-top md:bg-center bg-no-repeat">
+      <section className="relative pt-40 pb-10 md:py-16 bg-[url('/assets/ASLBG1MOBILE.webp')] md:bg-[url('/assets/ASLBG1DESK.webp')] bg-contain md:bg-cover bg-top md:bg-center bg-no-repeat">
         <div className="absolute inset-0 bg-transparent" />
         <div className="relative max-w-[350px] md:max-w-[1140px] mx-auto px-4 md:px-6 text-center md:text-left">
           <img src="/assets/LOGO ACENDA DOURADO.svg" alt="Acenda Sua Luz" className="h-10 md:h-12 mb-6 md:mb-8 mx-auto md:mx-0" />
@@ -198,7 +252,7 @@ export default function App() {
             </div>
             <div className="flex flex-col md:flex-row flex-wrap justify-center md:justify-start gap-3">
               {[
-                { icon: <img src="/assets/SELO MEC.png" alt="MEC" className="w-[60px] h-[60px] object-contain" />, text: <span className="leading-tight">Programa com<br className="hidden md:inline" /> certificação MEC</span> },
+                { icon: <img src="/assets/SELO MEC.webp" alt="MEC" className="w-[60px] h-[60px] object-contain" />, text: <span className="leading-tight">Programa com<br className="hidden md:inline" /> certificação MEC</span> },
                 { icon: <svg className="w-[40px] h-[40px]" fill="none" viewBox="0 0 24 24" stroke="url(#goldGrad)"><defs><linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#90660E"/><stop offset="50%" stopColor="#D8BA67"/><stop offset="100%" stopColor="#90660E"/></linearGradient></defs><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>, text: <span className="leading-tight text-left">11 anos de estudo em<br className="hidden md:inline" /> comportamento humano</span> },
                 { icon: <svg className="w-[40px] h-[40px]" fill="none" viewBox="0 0 24 24" stroke="url(#goldGrad2)"><defs><linearGradient id="goldGrad2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#90660E"/><stop offset="50%" stopColor="#D8BA67"/><stop offset="100%" stopColor="#90660E"/></linearGradient></defs><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>, text: <span className="leading-tight">+40.000 vidas<br className="hidden md:inline" /> transformadas</span> },
               ].map(({ icon, text }) => (
@@ -212,7 +266,7 @@ export default function App() {
       </section>
 
       {/* ═══════════════ SEÇÃO DE DOR ═══════════════ */}
-      <section className="relative py-10 md:py-16 bg-brand-bg-light bg-cover bg-center" style={{ backgroundImage: "url('/assets/ASLBG2DESK.png')" }}>
+      <section className="relative py-10 md:py-16 bg-brand-bg-light bg-cover bg-center" style={{ backgroundImage: "url('/assets/ASLBG2DESK.webp')" }}>
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative max-w-[350px] md:max-w-[1140px] mx-auto px-4 md:px-6">
           <h2 className="font-serif font-light text-[26px] md:text-[40px] leading-[1.1] md:leading-[1.15] text-center mb-2 md:mb-4">
@@ -259,7 +313,7 @@ export default function App() {
           <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
             {/* Imagem */}
             <div className="flex-shrink-0 w-full md:w-[400px]">
-              <img src="/assets/ft acenda 2 desktop.png" alt="Carol Rache" className="w-full h-48 md:h-auto object-cover rounded-2xl" />
+              <img src="/assets/ft acenda 2 desktop.webp" alt="Carol Rache" className="w-full h-48 md:h-auto object-cover rounded-2xl" />
             </div>
             {/* Texto */}
             <div className="space-y-6 text-center md:text-left">
@@ -386,9 +440,9 @@ export default function App() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>, title: '30 minutos por dia, pelo app', text: 'Todos os dias você recebe exatamente o que precisa fazer. Sem precisar pensar. Sem depender da sua motivação. Dia 1, dia 2, dia 3... é só seguir.', img: '/assets/ft app acenda.png' },
-                { icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" /></svg>, title: 'Grupo de WhatsApp com Carol e o time', text: 'Dúvidas respondidas em tempo real. Você nunca vai travar sem ter para quem recorrer.', img: '/assets/ft grupo acenda.png' },
-                { icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>, title: <span className="md:whitespace-nowrap">Mentoria Semanal ao Vivo com Carol Rache</span>, text: 'Toda semana, um encontro para impulsionar sua transformação, trabalhar o que surgiu e manter o momentum.', img: '/assets/ft mentoria semanal acenda.png' },
+                { icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>, title: '30 minutos por dia, pelo app', text: 'Todos os dias você recebe exatamente o que precisa fazer. Sem precisar pensar. Sem depender da sua motivação. Dia 1, dia 2, dia 3... é só seguir.', img: '/assets/ft app acenda.webp' },
+                { icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" /></svg>, title: 'Grupo de WhatsApp com Carol e o time', text: 'Dúvidas respondidas em tempo real. Você nunca vai travar sem ter para quem recorrer.', img: '/assets/ft grupo acenda.webp' },
+                { icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>, title: <span className="md:whitespace-nowrap">Mentoria Semanal ao Vivo com Carol Rache</span>, text: 'Toda semana, um encontro para impulsionar sua transformação, trabalhar o que surgiu e manter o momentum.', img: '/assets/ft mentoria semanal acenda.webp' },
               ].map(({ icon, title, text, img }) => (
                 <div key={title} className="flex flex-col items-center text-center relative">
                   {/* Ícone sobre a linha */}
@@ -425,7 +479,7 @@ export default function App() {
                 </div>
                 <div className="w-px h-6 bg-gradient-to-b from-[#D8BA67] to-[#D8BA67]/30" />
                 <div className="w-full aspect-[4/3] rounded-xl mb-6 flex items-center justify-center overflow-hidden">
-                  <img src="/assets/ft liz acenda.png" alt="LIZ mentora virtual" className="w-full h-full object-contain" />
+                  <img src="/assets/ft liz acenda.webp" alt="LIZ mentora virtual" className="w-full h-full object-contain" />
                 </div>
                 <h4 className="font-sans font-bold text-base mb-2">Acesso à LIZ, sua mentora virtual 24h</h4>
                 <p className="font-sans text-sm font-light text-brand-dark leading-relaxed">
@@ -439,11 +493,11 @@ export default function App() {
                   <p className="font-sans text-brand-dark/40 text-center">[Inserir comparativo visual: mesma pergunta feita ao GPT vs. à LIZ]</p>
                 </div>
                 <div className="hidden md:block rounded-2xl overflow-hidden flex-1 min-h-0">
-                  <img src="/assets/ft depoimentos acenda.png" alt="Depoimentos sobre a LIZ" className="w-full h-full object-cover" />
+                  <img src="/assets/ft depoimentos acenda.webp" alt="Depoimentos sobre a LIZ" className="w-full h-full object-cover" />
                 </div>
                 <div className="md:hidden flex flex-col gap-4">
                   {[1,2,3,4].map((n) => (
-                    <img key={n} src={`/assets/depo${n} acenda.png`} alt={`Depoimento ${n}`} className="w-full h-auto rounded-2xl" />
+                    <img key={n} src={`/assets/depo${n} acenda.webp`} alt={`Depoimento ${n}`} className="w-full h-auto rounded-2xl" />
                   ))}
                 </div>
               </div>
@@ -487,7 +541,7 @@ export default function App() {
               'Comunicação', 'Produtividade', 'Detox Alimentar', 'Treinos e Yoga',
               'Meditações Guiadas', 'Sound Healing', 'Energia Fem. & Masc.', 'Imagem Pessoal',
             ].map((trilha) => {
-              const trilhaImg = { 'Autoestima': '/assets/ft autoestima acenda.png', 'Relacionamentos': '/assets/ft relacionamentos acenda.png', 'Prosperidade': '/assets/ft prosperidade acenda.png', 'Propósito & Talentos': '/assets/ft proposito e talentos acenda.png', 'Comunicação': '/assets/ft comunicacao acenda.png', 'Produtividade': '/assets/ft produtividade acenda.png', 'Treinos e Yoga': '/assets/ft treinos e yoga acenda.png', 'Meditações Guiadas': '/assets/ft meditacao guiada acenda.png', 'Detox Alimentar': '/assets/ft detox acenda.png', 'Sound Healing': '/assets/ft sound healing acenda.png', 'Energia Fem. & Masc.': '/assets/ft energia fem e masc acenda.png', 'Imagem Pessoal': '/assets/ft imagem pessoal acenda.png' }[trilha];
+              const trilhaImg = { 'Autoestima': '/assets/ft autoestima acenda.webp', 'Relacionamentos': '/assets/ft relacionamentos acenda.webp', 'Prosperidade': '/assets/ft prosperidade acenda.webp', 'Propósito & Talentos': '/assets/ft proposito e talentos acenda.webp', 'Comunicação': '/assets/ft comunicacao acenda.webp', 'Produtividade': '/assets/ft produtividade acenda.webp', 'Treinos e Yoga': '/assets/ft treinos e yoga acenda.webp', 'Meditações Guiadas': '/assets/ft meditacao guiada acenda.webp', 'Detox Alimentar': '/assets/ft detox acenda.webp', 'Sound Healing': '/assets/ft sound healing acenda.webp', 'Energia Fem. & Masc.': '/assets/ft energia fem e masc acenda.webp', 'Imagem Pessoal': '/assets/ft imagem pessoal acenda.webp' }[trilha];
               return (
               <div key={trilha} className="flex flex-col items-center text-center">
                 <div className="w-full h-64 rounded-xl mb-3 overflow-hidden flex items-center justify-center bg-white/5 border border-white/10">
@@ -530,7 +584,7 @@ export default function App() {
               }`} />
               <div className="grid grid-cols-3 gap-6">
                 {row.map((trilha) => {
-                  const trilhaImg = { 'Autoestima': '/assets/ft autoestima acenda.png', 'Relacionamentos': '/assets/ft relacionamentos acenda.png', 'Prosperidade': '/assets/ft prosperidade acenda.png', 'Propósito & Talentos': '/assets/ft proposito e talentos acenda.png', 'Comunicação': '/assets/ft comunicacao acenda.png', 'Produtividade': '/assets/ft produtividade acenda.png', 'Treinos e Yoga': '/assets/ft treinos e yoga acenda.png', 'Meditações Guiadas': '/assets/ft meditacao guiada acenda.png', 'Detox Alimentar': '/assets/ft detox acenda.png', 'Sound Healing': '/assets/ft sound healing acenda.png', 'Energia Fem. & Masc.': '/assets/ft energia fem e masc acenda.png', 'Imagem Pessoal': '/assets/ft imagem pessoal acenda.png' }[trilha];
+                  const trilhaImg = { 'Autoestima': '/assets/ft autoestima acenda.webp', 'Relacionamentos': '/assets/ft relacionamentos acenda.webp', 'Prosperidade': '/assets/ft prosperidade acenda.webp', 'Propósito & Talentos': '/assets/ft proposito e talentos acenda.webp', 'Comunicação': '/assets/ft comunicacao acenda.webp', 'Produtividade': '/assets/ft produtividade acenda.webp', 'Treinos e Yoga': '/assets/ft treinos e yoga acenda.webp', 'Meditações Guiadas': '/assets/ft meditacao guiada acenda.webp', 'Detox Alimentar': '/assets/ft detox acenda.webp', 'Sound Healing': '/assets/ft sound healing acenda.webp', 'Energia Fem. & Masc.': '/assets/ft energia fem e masc acenda.webp', 'Imagem Pessoal': '/assets/ft imagem pessoal acenda.webp' }[trilha];
                   return (
                   <div key={trilha} className="flex flex-col items-center text-center">
                     <div className="w-9 h-9 rounded-full bg-black border border-[#D8BA67] flex items-center justify-center z-10">
@@ -559,11 +613,11 @@ export default function App() {
       </section>
 
       {/* ═══════════════ RESUMO + INVESTIMENTO ═══════════════ */}
-      <section id="investimento" className="relative pt-2 md:pt-4 pb-10 md:pb-16 bg-brand-bg-light bg-cover bg-center" style={{ backgroundImage: "url('/assets/ASLBG4DESK.png')" }}>
+      <section id="investimento" className="relative pt-2 md:pt-4 pb-10 md:pb-16 bg-brand-bg-light bg-cover bg-center" style={{ backgroundImage: "url('/assets/ASLBG4DESK.webp')" }}>
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative max-w-[350px] md:max-w-[1140px] mx-auto px-4 md:px-6">
           <div className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-8 md:p-12 pt-[60px] md:pt-[340px] max-w-[900px] mx-auto mt-[90px] md:mt-[150px]">
-            <img src="/assets/mockup acenda.png" alt="Acenda Sua Luz" className="absolute left-1/2 -translate-x-1/2 -top-[200px] md:-top-[280px] w-[140%] max-w-[900px] md:max-w-[1000px] pointer-events-none" />
+            <img src="/assets/mockup acenda.webp" alt="Acenda Sua Luz" className="absolute left-1/2 -translate-x-1/2 -top-[200px] md:-top-[280px] w-[140%] max-w-[900px] md:max-w-[1000px] pointer-events-none" />
             <h2 className="font-serif font-light text-[26px] md:text-[40px] leading-[1.1] md:leading-[1.15] text-center mb-6 md:mb-10">
               Ao entrar no <span className="text-gold-gradient">Acenda Sua Luz</span>, você recebe:
             </h2>
@@ -612,7 +666,7 @@ export default function App() {
       </section>
 
       {/* ═══════════════ GARANTIA ═══════════════ */}
-      <section className="relative pt-4 md:pt-6 pb-10 md:pb-16 bg-brand-bg-light bg-cover bg-center" style={{ backgroundImage: "url('/assets/ASLBG4DESK.png')" }}>
+      <section className="relative pt-4 md:pt-6 pb-10 md:pb-16 bg-brand-bg-light bg-cover bg-center" style={{ backgroundImage: "url('/assets/ASLBG4DESK.webp')" }}>
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative max-w-[350px] md:max-w-[1140px] mx-auto px-4 md:px-6">
           <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl px-6 py-8 md:px-12 md:py-12 max-w-[900px] mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
@@ -688,7 +742,7 @@ export default function App() {
             {/* Foto placeholder */}
             <div className="md:w-[45%]">
               <div className="rounded-lg shadow-2xl aspect-[5/6] md:aspect-[3/4] overflow-hidden">
-                <img src="/assets/ft carol bio acenda.png" alt="Carol Rache" className="w-full h-full object-cover" />
+                <img src="/assets/ft carol bio acenda.webp" alt="Carol Rache" className="w-full h-full object-cover" />
               </div>
             </div>
           </div>
@@ -698,10 +752,10 @@ export default function App() {
             {[
               { icon: <img src="/assets/diretrizes-de-direitos-autorais.svg" alt="" className="w-12 h-12" style={{ filter: 'invert(73%) sepia(46%) saturate(389%) hue-rotate(5deg) brightness(92%) contrast(86%)' }} />, text: <span>Criadora de um método<br/>100% autoral validado por<br/>mais de 40 mil mulheres</span> },
               { icon: <svg className="w-12 h-12 text-[#D8BA67]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>, text: <span>11 anos estudando<br/>comportamento humano</span> },
-              { icon: <img src="/assets/LOGO HARVARD PRETO.png" alt="Harvard" className="w-16 md:w-24 h-16 md:h-24 object-contain" />, text: <span>Certificada pela universidade<br/>mais reconhecida do mundo: Harvard</span> },
-              { icon: <img src="/assets/SELO MEC.png" alt="MEC" className="w-16 md:w-24 h-16 md:h-24 object-contain" />, text: <span>Programa com certificação<br/>reconhecida pelo MEC</span> },
+              { icon: <img src="/assets/LOGO HARVARD PRETO.webp" alt="Harvard" className="w-16 md:w-24 h-16 md:h-24 object-contain" />, text: <span>Certificada pela universidade<br/>mais reconhecida do mundo: Harvard</span> },
+              { icon: <img src="/assets/SELO MEC.webp" alt="MEC" className="w-16 md:w-24 h-16 md:h-24 object-contain" />, text: <span>Programa com certificação<br/>reconhecida pelo MEC</span> },
               { icon: <img src="/assets/LOGO FORBES.svg" alt="Forbes" className="w-16 md:w-24 h-16 md:h-24" style={{ filter: 'brightness(0)' }} />, text: 'Colunista Forbes' },
-              { icon: <img src="/assets/LOGO O TEMPO.png" alt="O Tempo" className="w-16 md:w-24 h-16 md:h-24 object-contain" />, text: 'Colunista Jornal O Tempo' },
+              { icon: <img src="/assets/LOGO O TEMPO.webp" alt="O Tempo" className="w-16 md:w-24 h-16 md:h-24 object-contain" />, text: 'Colunista Jornal O Tempo' },
             ].map(({ icon, text }, i) => (
               <div key={i} className="font-sans text-sm text-black flex items-center justify-center gap-3 border border-brand-dark/15 rounded-md px-4 py-2 h-[80px] md:h-[100px] bg-brand-dark/5 backdrop-blur-md">
                 <span className="flex-shrink-0">{icon}</span>

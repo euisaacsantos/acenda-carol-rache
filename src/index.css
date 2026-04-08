@@ -76,6 +76,75 @@ p {
   text-wrap: pretty;
 }
 
+/* ── Reveal on scroll (suave e elegante) ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Variações com pequeno stagger via delay */
+.reveal-delay-1 { transition-delay: 80ms; }
+.reveal-delay-2 { transition-delay: 160ms; }
+.reveal-delay-3 { transition-delay: 240ms; }
+.reveal-delay-4 { transition-delay: 320ms; }
+
+/* Imagens: fade + leve zoom-out */
+.reveal-img {
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 1400ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal-img.in-view {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Hover lift sutil em cards e imagens dentro de grids */
+.lift {
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1),
+              filter 500ms ease;
+  will-change: transform;
+}
+.lift:hover {
+  transform: translateY(-4px);
+  filter: brightness(1.05);
+}
+
+/* Glow pulse muito leve no botão dourado (já tem hover:scale) */
+@keyframes subtle-glow {
+  0%, 100% { box-shadow: 0 0 30px rgba(144,102,14,0.30); }
+  50%      { box-shadow: 0 0 42px rgba(216,186,103,0.45); }
+}
+.animate-subtle-glow {
+  animation: subtle-glow 3.2s ease-in-out infinite;
+}
+
+/* Float lento para mockup/imagens-destaque */
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+.animate-float-soft {
+  animation: float-soft 6s ease-in-out infinite;
+}
+
+/* Respeita preferência do usuário */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-img { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .lift { transition: none !important; }
+  .animate-subtle-glow, .animate-float-soft, .animate-pulse-scale { animation: none !important; }
+}
+
 @keyframes pulse-scale {
   0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 15px rgba(144,102,14,0.4); }
   50% { transform: translate(-50%, -50%) scale(1.15); box-shadow: 0 0 25px rgba(144,102,14,0.6); }
