@@ -393,22 +393,24 @@ export default function App() {
             Veja o que dizem quem já passou pelo Acenda:
           </h2>
 
-          {/* Depoimento destaque (Cicarelli) */}
+          {/* Depoimento destaque (Cicarelli) — oculto temporariamente
           <div className="bg-gradient-to-r from-[#90660E]/10 to-[#D8BA67]/5 border border-brand-gold/30 rounded-2xl p-8 md:p-12 max-w-[800px] mx-auto mb-8">
             <p className="font-sans text-base md:text-lg italic text-white mb-4">
               "[Inserir depoimento da Cicarelli — destaque visual por ser figura pública]"
             </p>
             <p className="font-sans font-bold text-gold-gradient">— Nome da Figura Pública</p>
           </div>
+          */}
 
           {/* Depoimentos adicionais */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[900px] mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-[1140px] mx-auto">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-6">
-                <p className="font-sans text-sm text-white italic mb-4">
-                  "Depoimento adicional #{i} — inserir depoimento real com foto e nome."
-                </p>
-                <p className="font-sans text-sm font-bold text-gold-gradient">— Nome da Aluna</p>
+              <div key={i} className="rounded-xl overflow-hidden">
+                <img
+                  src={`/assets/depo${i} asl.png`}
+                  alt={`Depoimento ${i}`}
+                  className="w-full h-auto rounded-xl"
+                />
               </div>
             ))}
           </div>
@@ -489,8 +491,15 @@ export default function App() {
               </div>
               {/* Comparativo + depoimentos ao lado, alinhados com a imagem */}
               <div className="flex flex-col gap-4 md:w-2/3 md:mt-[54px] md:aspect-[8/3]">
-                <div className="bg-brand-dark/5 border border-brand-dark/10 rounded-2xl p-8 flex items-center justify-center flex-1 min-h-0">
-                  <p className="font-sans text-brand-dark/40 text-center">[Inserir comparativo visual: mesma pergunta feita ao GPT vs. à LIZ]</p>
+                <div className="bg-brand-dark/5 border border-brand-dark/10 rounded-2xl p-8 flex gap-4 flex-1 min-h-0 items-center justify-center">
+                  <div className="w-1/2 flex flex-col items-center">
+                    <p className="font-sans font-bold text-sm md:text-base text-brand-dark mb-2">Pergunta feita no ChatGPT</p>
+                    <img src="/assets/GPT.png" alt="Resposta do ChatGPT" className="w-full h-auto rounded-2xl object-contain" />
+                  </div>
+                  <div className="w-1/2 flex flex-col items-center">
+                    <p className="font-sans font-bold text-sm md:text-base text-brand-dark mb-2">Pergunta feita para a Liz</p>
+                    <img src="/assets/LIZ.png" alt="Resposta da LIZ" className="w-full h-auto rounded-2xl object-contain" />
+                  </div>
                 </div>
                 <div className="md:hidden flex flex-col gap-4">
                   {[1,2,3,4].map((n) => (
@@ -705,16 +714,14 @@ export default function App() {
           <h2 className="font-serif font-light text-[26px] md:text-[40px] leading-[1.1] md:leading-[1.15] text-center mb-2 md:mb-4">
             Mais histórias reais de transformação:
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[900px] mx-auto">
-            {['Autoestima', 'Relacionamento', 'Prosperidade', 'Corpo'].map((tema) => (
-              <div key={tema} className="bg-white/5 border border-white/10 rounded-xl p-6">
-                <span className="inline-block border border-brand-gold/15 rounded-md px-3 py-1 text-xs font-sans text-gold-gradient mb-3">
-                  {tema}
-                </span>
-                <p className="font-sans text-sm text-white italic mb-4">
-                  "[Inserir depoimento sobre {tema.toLowerCase()} — com foto e nome]"
-                </p>
-                <p className="font-sans text-sm font-bold text-gold-gradient">— Nome da Aluna</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-[1140px] mx-auto">
+            {[5, 6, 7, 8].map((i) => (
+              <div key={i} className="rounded-xl overflow-hidden">
+                <img
+                  src={`/assets/depo${i} asl.png`}
+                  alt={`Depoimento ${i}`}
+                  className="w-full h-auto rounded-xl"
+                />
               </div>
             ))}
           </div>
